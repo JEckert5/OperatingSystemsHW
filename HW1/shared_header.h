@@ -2,22 +2,20 @@
 #include <stdio.h>
 #include <semaphore.h>
 #include <sys/mman.h>
+#include <sys/shm.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 const char* ShmName = "OSTable";
 
 typedef sem_t Semaphore;
 
-struct ProducedObject {
-    int noise;
-};
-
 struct ShmBuffer {
-    Semaphore semaphore1;
-    Semaphore semaphore2;
+    Semaphore ready;
+    Semaphore done;
 
-    struct ProducedObject table[2];
+    int table[2];
 };

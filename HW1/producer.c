@@ -1,7 +1,15 @@
 #include "shared_header.h"
 
-int main(void) {
-    int shmHandle = shm_open("OSTable", O_RDWR | O_CREAT, S_IRWXU);
+// int main() {
+//     printf("HELLO\n");
+//     int shmHandle;
+//     shmHandle = shm_open(ShmName, O_RDWR | O_CREAT, S_IRWXU);
+// }
+
+int main() {
+    int shmHandle;
+
+    shmHandle = shm_open(ShmName, O_RDWR | O_CREAT, S_IRWXU);
     struct ShmBuffer *map;
 
     if (shmHandle == -1) {
@@ -16,24 +24,47 @@ int main(void) {
 
     map = mmap(NULL, sizeof(*map), PROT_READ | PROT_WRITE, MAP_SHARED, shmHandle, 0);
 
+
     if (map == MAP_FAILED) {
         printf("Error occured mapping ShmBuffer to the table.");
         exit(-1);
     }
 
-    if (sem_init(&map->semaphore1, 1, 0) == -1) {
-        printf("Error initializing semaphore1");
+    if (sem_init(&map->ready, 1, 0) == -1) {
+        printf("Error initializing ready semaphore");
         exit(-1);
     }
 
-    if (sem_init(&map->semaphore2, 1, 0) == -1) {
-        printf("Error initializing semaphore2");
+    if (sem_init(&map->done, 1, 0) == -1) {
+        printf("ready2 died");
         exit(-1);
     }
 
-    // ready for consumer
+    sem_post(&map->ready);
 
-    
+    for (int i = 0; i < 2; i++)
+        printf("%i\n", map->table[i]);
+
+    fflush(stdout);
+
+    while (true) {
+        sem_wait(&map->done);
+
+        //printf("did this even happen\n");
+
+        for (int i = 0; i < 2; i++) {
+            
+            map->table[i] = 69;
+
+            // printf("Prodoocer: %i\n", map->table[i]);
+        }
+
+        //printf("yes it did\n");
+
+        fflush(stdout);
+
+        sem_post(&map->ready);
+    }
 
     return 0;
 }
