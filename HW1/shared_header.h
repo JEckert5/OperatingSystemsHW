@@ -8,14 +8,18 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <signal.h>
+#include <time.h>
 
 const char* ShmName = "OSTable";
 
 typedef sem_t Semaphore;
 
-struct ShmBuffer {
+typedef struct {
     Semaphore ready;
     Semaphore done;
 
     int table[2];
-};
+
+    int test;
+} ShmBuffer;
