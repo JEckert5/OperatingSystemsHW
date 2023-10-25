@@ -13,7 +13,7 @@ I compiled this on an Ubuntu Docker image so there shouldn't be any issues.
 
 # Expected output
 
-Will print the random numbers produced by the producer, wait 1 second, then show the consumed numbers. They should match the produced numbers.
+Will print the random numbers produced by the producer, wait 1 second, then show the consumed numbers. They should match the produced numbers. 
 
 Example:
 

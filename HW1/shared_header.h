@@ -20,6 +20,4 @@ typedef struct {
     Semaphore done;
 
     int table[2];
-
-    int test;
 } ShmBuffer;

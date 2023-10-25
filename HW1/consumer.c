@@ -4,11 +4,10 @@ int main(void) {
     int shmHandle = -1;
     ShmBuffer *map;
 
-    shmHandle = shm_open(ShmName, O_RDWR, 0);
-
-    if (shmHandle == -1) {
-        printf("Failed to acquire shared memory pool.");
-        exit(EXIT_FAILURE);
+    // Wait until shm is made, if even necessary.
+    while (shmHandle == -1) {
+        shmHandle = shm_open(ShmName, O_RDWR, 0);
+        printf("Consumer handle: %i\n", shmHandle);
     }
 
     map = mmap(NULL, sizeof(ShmBuffer), PROT_READ | PROT_WRITE, MAP_SHARED, shmHandle, 0);
@@ -37,7 +36,6 @@ int main(void) {
 
         sem_post(&map->done);
     }
-    
 
     return 0;
 }
