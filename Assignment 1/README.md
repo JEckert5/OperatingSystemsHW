@@ -1,10 +1,7 @@
 # Compilation
 
-Run 
-
     make hw
 
-in the HW1 directory.
 I compiled this on an Ubuntu Docker image so there shouldn't be any issues.
 
 # Running
