@@ -29,3 +29,4 @@ Example:
     make clean
 
 Removes the `procuder` and `consumer` executables.
+Also runs the program in `delTable.c`, which just makes sure the shared memory is unlinked by calling <b>shm_unlink(ShmName)</b> and returning.
